@@ -28,3 +28,7 @@
 #   description = "Map of public IPs created within `vmseries` module instances."
 #   value       = { for k, v in module.vmseries : k => v.public_ips }
 # }
+
+output "subnet_mgt" {
+  value = module.subnet_sets #["security_vpc-mgmt"].subnets)[0].id
+}
