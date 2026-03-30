@@ -30,5 +30,5 @@
 # }
 
 output "subnet_mgt" {
-  value = module.subnet_sets["security_vpc-mgmt"].subnets["us-east-2a"].id
+  value = values(module.subnet_sets["security_vpc-mgmt"].subnets)[0].id
 }
