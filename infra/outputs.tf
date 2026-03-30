@@ -29,6 +29,6 @@
 #   value       = { for k, v in module.vmseries : k => v.public_ips }
 # }
 
-output "subnet_mgt" {
-  value = module.subnet_sets #["security_vpc-mgmt"].subnets)[0].id
-}
+# output "subnet_mgt" {
+#   value = values(module.subnet_sets["${}"].subnets)[0].id # security_vpc-davila-xsiam-lab-mgmt
+# }
