@@ -1,5 +1,5 @@
 resource "random_id" "sufix" {
-  byte_length = 8
+  byte_length = 4
 }
 
 locals {
