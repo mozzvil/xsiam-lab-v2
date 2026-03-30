@@ -20,37 +20,37 @@ module "bootstrap" {
 
 ### VM-Series INSTANCES
 
-module "vmseries" {
-  source = "./modules/vmseries"
+# module "vmseries" {
+#   source = "./modules/vmseries"
 
-  for_each = { for vmseries in local.vmseries_instances : "${vmseries.group}-${vmseries.instance}" => vmseries }
+#   for_each = { for vmseries in local.vmseries_instances : "${vmseries.group}-${vmseries.instance}" => vmseries }
 
-  name              = "${var.name_prefix}-${each.key}"
-  vmseries_version  = each.value.common.panos_version
-  ebs_kms_key_alias = each.value.common.ebs_kms_id
+#   name              = "${var.name_prefix}-${each.key}"
+#   vmseries_version  = each.value.common.panos_version
+#   ebs_kms_key_alias = each.value.common.ebs_kms_id
 
-  interfaces = {
-    for k, v in each.value.common.interfaces : k => {
-      device_index       = v.device_index
-      private_ips        = [v.private_ip[each.value.instance]]
-      security_group_ids = try([module.vpc[each.value.common.vpc].security_group_ids[v.security_group]], [])
-      source_dest_check  = try(v.source_dest_check, false)
-      subnet_id          = module.subnet_sets["${v.vpc}-${v.subnet_group}"].subnets[each.value.az].id
-      create_public_ip   = try(v.create_public_ip, false)
-      eip_allocation_id  = try(v.eip_allocation_id[each.value.instance], null)
-      ipv6_address_count = try(v.ipv6_address_count, null)
-    }
-  }
+#   interfaces = {
+#     for k, v in each.value.common.interfaces : k => {
+#       device_index       = v.device_index
+#       private_ips        = [v.private_ip[each.value.instance]]
+#       security_group_ids = try([module.vpc[each.value.common.vpc].security_group_ids[v.security_group]], [])
+#       source_dest_check  = try(v.source_dest_check, false)
+#       subnet_id          = module.subnet_sets["${v.vpc}-${v.subnet_group}"].subnets[each.value.az].id
+#       create_public_ip   = try(v.create_public_ip, false)
+#       eip_allocation_id  = try(v.eip_allocation_id[each.value.instance], null)
+#       ipv6_address_count = try(v.ipv6_address_count, null)
+#     }
+#   }
 
-  bootstrap_options = join(";", compact(concat(
-    ["vmseries-bootstrap-aws-s3bucket=${module.bootstrap[each.key].bucket_name}"],
-    ["mgmt-interface-swap=${each.value.common.bootstrap_options["mgmt-interface-swap"]}"],
-  )))
+#   bootstrap_options = join(";", compact(concat(
+#     ["vmseries-bootstrap-aws-s3bucket=${module.bootstrap[each.key].bucket_name}"],
+#     ["mgmt-interface-swap=${each.value.common.bootstrap_options["mgmt-interface-swap"]}"],
+#   )))
 
-  iam_instance_profile = module.bootstrap[each.key].instance_profile_name
-  ssh_key_name         = var.ssh_key_name
-  tags                 = var.global_tags
-}
+#   iam_instance_profile = module.bootstrap[each.key].instance_profile_name
+#   ssh_key_name         = var.ssh_key_name
+#   tags                 = var.global_tags
+# }
 
 ### IAM ROLES AND POLICIES ###
 
