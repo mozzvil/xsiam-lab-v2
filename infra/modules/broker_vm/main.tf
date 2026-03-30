@@ -4,7 +4,8 @@ resource "random_id" "broker_vm_suffix" {
 
 resource "aws_s3_bucket" "broker_vm" {
   bucket = "${var.name_prefix}-broker-vm-${random_id.broker_vm_suffix.hex}"
-
+  force_destroy = true
+  
   tags = merge(
     var.global_tags,
     {
