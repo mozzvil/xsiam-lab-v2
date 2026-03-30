@@ -15,7 +15,7 @@ data "aws_ami_ids" "broker" {
 }
 
 locals {
-  broker_ami_id = length(data.aws_amis.broker.ids) > 0 ? data.aws_amis.broker.ids[0] : null
+  broker_ami_id = length(data.aws_ami_ids.broker.ids) > 0 ? data.aws_ami_ids.broker.ids[0] : null
   engine_ami_id = try(data.aws_ami.ubuntu2204.id, null)
 }
 
