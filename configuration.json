@@ -2,7 +2,7 @@
    "Description":"Cortex XSIAM Broker VM <version>",
    "Format":"vmdk",
    "UserBucket":{
-      "S3Bucket":"<your_bucket>",
+      "S3Bucket":"davila-xsiam-lab-broker-vm-5e738b2a",
       "S3Key":"broker-vm-30.0.63.vmdk"
    }
 }

@@ -35,6 +35,11 @@ variable "broker_vm" {
   default     = false
 }
 
+variable "broker_vm_key" {
+  type = string
+  default = "broker-vm-30.0.63.vmdk"
+}
+
 variable "engine_vm" {
   description = "Engine VM Deployment"
   type        = bool
