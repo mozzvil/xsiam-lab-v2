@@ -26,34 +26,34 @@ data "aws_subnets" "mgmt" {
   }
 }
 
-# resource "aws_instance" "jumpbox" {
-#   for_each = local.jumpbox
+resource "aws_instance" "jumpbox" {
+  for_each = local.jumpbox
 
-#   ami                    = each.value.ami
-#   instance_type          = each.value.type
-#   key_name               = var.ssh_key_name
-#   vpc_security_group_ids = try([module.vpc[var.vpc_name].security_group_ids["vmseries_mgmt"].id], [])
-#   ebs_optimized          = true
-#   subnet_id              = module.subnet_sets.subnets["security_vpc-mgmt"].id
-#   lifecycle {
-#     ignore_changes = [ami]
-#   }
-#   metadata_options {
-#     http_endpoint = "enabled"
-#     http_tokens   = "required"
-#   }
+  ami                    = each.value.ami
+  instance_type          = each.value.type
+  key_name               = var.ssh_key_name
+  vpc_security_group_ids = try([module.vpc[var.vpc_name].security_group_ids["vmseries_mgmt"].id], [])
+  ebs_optimized          = true
+  subnet_id              = values(module.subnet_sets["security_vpc-mgmt"].subnets)[0].id
+  lifecycle {
+    ignore_changes = [ami]
+  }
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
 
-#   root_block_device {
-#     volume_type           = "gp3"
-#     volume_size           = 50
-#     delete_on_termination = true
-#     encrypted             = true
-#   }
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = 50
+    delete_on_termination = true
+    encrypted             = true
+  }
 
-#   tags = merge(
-#     var.global_tags,
-#     {
-#       Name = each.key
-#     }
-#   )
-# }
+  tags = merge(
+    var.global_tags,
+    {
+      Name = each.key
+    }
+  )
+}
