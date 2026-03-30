@@ -33,4 +33,4 @@ jobs:
           -backend-config="region=${{ env.AWS_REGION }}" \
           -backend-config="key=terraform.tfstate"
 
-          terraform apply --auto-approve -var-file=terraform.tfvars -input=false
+          terraform plan -var-file=terraform.tfvars -input=false

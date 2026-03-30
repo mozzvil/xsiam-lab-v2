@@ -37,48 +37,48 @@ locals {
       ami    = local.broker_ami_id
       type   = "t3.medium"
       user   = "ubuntu"
-      subnet = "windows"
+      network = { subnet = var.broker_vm_subnet, public_ip = false} # Always Public IP is FALSE
     }
     "${var.name_prefix}-engine" = {
       deploy = var.engine_vm
       ami    = local.engine_ami_id
       type   = "t3.medium"
       user   = "ubuntu"
-      subnet = "linux"
+      network = { subnet = var.engine_vm_subnet, public_ip = false} # Always Public IP is FALSE
     }
   }
 }
 
 
-# resource "aws_instance" "xsiam_components" {
-#   for_each = {
-#     for k, v in local.xsiam_components :
-#     k => v if v.deploy
-#   }
+resource "aws_instance" "xsiam_components" {
+  for_each = {
+    for k, v in local.xsiam_components :
+    k => v if v.deploy && v.ami != null
+  }
 
-#   ami                    = each.value.ami
-#   instance_type          = each.value.type
-#   key_name               = var.ssh_key_name
-#   vpc_security_group_ids = [data.aws_security_group.vm_series.id]
-#   ebs_optimized          = true
-#   subnet_id              = each.value.subnet == "windows" ? data.aws_subnets.subnet_windows.ids[0] : data.aws_subnets.subnet_linux.ids[0]
+  ami                    = each.value.ami
+  instance_type          = each.value.type
+  key_name               = var.ssh_key_name
+  vpc_security_group_ids = try([module.vpc[var.vpc_name].security_group_ids["vmseries_traffic"]], [])
+  ebs_optimized          = true
+  subnet_id              = values(module.subnet_sets["${var.vpc_name}-${var.name_prefix}-${each.value.network.subnet}"].subnets)[0].id
 
-#   metadata_options {
-#     http_endpoint = "enabled"
-#     http_tokens   = "required"
-#   }
+  metadata_options {
+    http_endpoint = "enabled"
+    http_tokens   = "required"
+  }
 
-#   root_block_device {
-#     volume_type           = "gp3"
-#     volume_size           = 30
-#     delete_on_termination = true
-#     encrypted             = true
-#   }
+  root_block_device {
+    volume_type           = "gp3"
+    volume_size           = 40
+    delete_on_termination = true
+    encrypted             = true
+  }
 
-#   tags = merge(
-#     var.global_tags,
-#     {
-#       Name = each.key
-#     }
-#   )
-# }
+  tags = merge(
+    var.global_tags,
+    {
+      Name = each.key
+    }
+  )
+}

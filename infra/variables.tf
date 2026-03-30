@@ -40,10 +40,20 @@ variable "broker_vm_key" {
   default = "broker-vm-30.0.63.vmdk"
 }
 
+variable "broker_vm_subnet" {
+  type = string
+  default = "vlan1"
+}
+
 variable "engine_vm" {
   description = "Engine VM Deployment"
   type        = bool
   default     = false
+}
+
+variable "engine_vm_subnet" {
+  type = string
+  default = "vlan1"
 }
 
 ### VPC

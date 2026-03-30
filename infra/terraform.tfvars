@@ -19,4 +19,7 @@ mgt_public_ips = ["186.31.0.249/32"]
 
 broker_vm = true
 broker_vm_key = "broker-vm-30.0.63.vmdk"
+broker_vm_subnet = ""
+
 engine_vm = false
+engine_vm_subnet = ""
