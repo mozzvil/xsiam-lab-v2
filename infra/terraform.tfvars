@@ -21,5 +21,5 @@ broker_vm        = true
 broker_vm_key    = "broker-vm-30.0.63.vmdk"
 broker_vm_subnet = "vlan1" # allowed values vlan1, vlan2. vlan1 by default
 
-engine_vm        = false
+engine_vm        = true
 engine_vm_subnet = "vlan1" # allowed values vlan1, vlan2. vlan1 by default
