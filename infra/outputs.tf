@@ -41,9 +41,9 @@
 #   value = local.fw_route_tables
 # }
 
-output "fw_default_routes" {
-  value = local.fw_default_routes
-}
+# output "fw_default_routes" {
+#   value = local.fw_default_routes
+# }
 
 output "broker_vm_bucket_name" {
   value = var.broker_vm ? module.broker_vm[0].broker_vm_bucket_name : null
