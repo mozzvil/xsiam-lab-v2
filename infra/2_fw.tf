@@ -95,7 +95,7 @@ EOF
 ### ROUTES ###
 
 locals {
-  fw_eni_ids = {
+  fw_interfaces = {
     for k, v in {
       for k2, v2 in module.vmseries :
       k2 => v2.interfaces
@@ -106,31 +106,31 @@ locals {
     }
   }
 
-  fw_vlans = {
+  route_tables = {
     for k, v in module.subnet_sets :
     k => v
-    if can(regex("vlan", k))
+    if can(regex("(vlan[0-9]+|public", k))
   }
 
   fw_default_routes = merge([
-    for fw_name, eni_map in local.fw_eni_ids : merge([
-      for rt_name, rt_data in local.fw_vlans : {
+    for fw_name, eni_map in local.fw_interfaces : merge([
+      for rt_name, rt_data in local.route_tables : {
         for az, rt_id in rt_data.unique_route_table_ids :
         "${fw_name}-${rt_name}-${az}" => {
           route_table_id = rt_id
-          eni_id         = eni_map[regex("vlan[0-9]+", rt_name)]
+          target_type    = can(regex("public", rt_name)) ? "igw" : "eni"
+          target_id      = can(regex("public", rt_name)) ? module.vpc[var.vpc_name].igw_id : eni_map[regex("(public|vlan[0-9]+)", rt_name)]
         }
-        if can(eni_map[regex("vlan[0-9]+", rt_name)])
+        if !can(regex("mgmt", rt_name))
       }
     ]...)
   ]...)
 }
 
+# resource "aws_route" "fw_default" {
+#   for_each = local.fw_default_routes
 
-resource "aws_route" "fw_default" {
-  for_each = local.fw_default_routes
-
-  route_table_id         = each.value.route_table_id
-  destination_cidr_block = "0.0.0.0/0"
-  network_interface_id   = each.value.eni_id
-}
+#   route_table_id         = each.value.route_table_id
+#   destination_cidr_block = "0.0.0.0/0"
+#   network_interface_id   = each.value.eni_id
+# }
