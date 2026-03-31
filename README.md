@@ -23,6 +23,10 @@ The deployment is fully automated and reproducible using Terraform.
 
 ---
 
+## Architecture Diagram
+
+![Architecture Diagram](xsiam-lab.png)
+
 ## Prerequisites
 
 ### AWS
