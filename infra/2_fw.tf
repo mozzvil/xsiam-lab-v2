@@ -91,3 +91,41 @@ resource "aws_iam_role_policy" "this" {
 
 EOF
 }
+
+### ROUTES ###
+
+# locals {
+#   vpc_routes_with_next_hop_map = flatten(concat([
+#     for vk, vv in local.vpcs : [
+#       for rk, rv in vv.routes : {
+#         vpc              = rv.vpc
+#         subnet           = rv.subnet_group
+#         to_cidr          = rv.to_cidr
+#         destination_type = rv.destination_type
+#         next_hop_type    = rv.next_hop_type
+#         next_hop_map = {
+#           "internet_gateway" = try(module.vpc[rv.next_hop_key].igw_as_next_hop_set, null)
+#         }
+#       }
+#   ]]))
+#   vpc_routes = {
+#     for route in local.vpc_routes_with_next_hop_map : "${route.vpc}-${route.subnet}-${route.to_cidr}" => {
+#       vpc              = route.vpc
+#       subnet           = route.subnet
+#       to_cidr          = route.to_cidr
+#       destination_type = route.destination_type
+#       next_hop_set     = lookup(route.next_hop_map, route.next_hop_type, null)
+#     }
+#   }
+# }
+
+# module "vpc_routes" {
+#   source = "./modules/vpc_route"
+
+#   for_each = local.vpc_routes
+
+#   route_table_ids  = module.subnet_sets["${each.value.vpc}-${each.value.subnet}"].unique_route_table_ids
+#   to_cidr          = each.value.to_cidr
+#   destination_type = each.value.destination_type
+#   next_hop_set     = each.value.next_hop_set
+# }

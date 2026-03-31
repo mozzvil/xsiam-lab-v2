@@ -82,29 +82,6 @@ module "subnet_sets" {
 ### ROUTES ###
 
 locals {
-  # Flatten the VPCs and their routes into a list of maps, each containing the VPC name, subnet name, and route details.
-  # In TFVARS there is no possibility to define ID of the next hop, so we need to use the key of the next hop e.g.name =
-  #
-  #    tgw_default = {
-  #      vpc           = "security_vpc"
-  #      subnet        = "tgw_attach"
-  #      to_cidr       = "0.0.0.0/0"
-  #      next_hop_key  = "security_gwlb_outbound"
-  #      next_hop_type = "gwlbe_endpoint"
-  #    }
-  #
-  # Value of `next_hop_type` defines the type of the next hop. It can be one of the following:
-  # - internet_gateway
-  #
-  # Please note, that in this example only internet_gateway is allowed, because no NAT Gateway, TGW or GWLB endpoints are created in main.tf
-  #
-  # If more next hop types are needed, they can be added below.
-  #
-  # Value of `next_hop_key` is the key of the next hop.
-  # It is used to reference the next hop in the module that manages it.
-  #
-  # Value of `to_cidr` is the CIDR of the destination.
-
   vpc_routes_with_next_hop_map = flatten(concat([
     for vk, vv in local.vpcs : [
       for rk, rv in vv.routes : {
