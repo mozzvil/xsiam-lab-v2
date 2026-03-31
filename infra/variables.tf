@@ -317,6 +317,14 @@ locals {
           next_hop_key     = var.vpc_name
           next_hop_type    = "internet_gateway"
         }
+        # vlan1_default = {
+        #   vpc              = var.vpc_name
+        #   subnet_group     = "${var.name_prefix}-vlan1"
+        #   to_cidr          = "0.0.0.0/0"
+        #   destination_type = "ipv4"
+        #   next_hop_key     = var.vpc_name
+        #   next_hop_type    = "network_interface"
+        # }
       }
     }
   }
