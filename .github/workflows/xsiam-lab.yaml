@@ -26,11 +26,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3
       - name: Write authcodes to tfvars
-          working-directory: ${{ env.working-directory }}
-          run: |
-            cat >> terraform.tfvars <<EOF
-            authcodes = "${{ env.AUTHCODES }}"
-            EOF
+        working-directory: ${{ env.working-directory }}
+        run: |
+          cat >> terraform.tfvars <<EOF
+          authcodes = "${{ env.AUTHCODES }}"
+          region = "${{ env.AWS_REGION }}"
+          EOF
       - name: Terraform Deployment
         id: init
         working-directory: ${{ env.working-directory }}

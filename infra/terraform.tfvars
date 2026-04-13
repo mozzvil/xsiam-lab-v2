@@ -1,5 +1,4 @@
 ### GENERAL
-region      = "us-east-2"        # TODO: update here
 name_prefix = "davila-xsiam-lab" # TODO: update here
 
 global_tags = {
