@@ -33,7 +33,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 22
-    # - name: Download cortexcli
+
     # - name: Download cortexcli
     #   run: |
     #     set -euxo pipefail
