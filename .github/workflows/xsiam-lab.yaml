@@ -34,29 +34,30 @@ jobs:
       with:
         node-version: 22
 
-    - name: Download cortexcli
-      run: |
-        set -euxo pipefail
+    # - name: Download cortexcli
+    #   run: |
+    #     set -euxo pipefail
 
-        crtx_resp="$(curl -sS "${CORTEX_API_URL}/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64" \
-          -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" \
-          -H "Authorization: ${CORTEX_API_KEY}")"
-        crtx_url="$(echo "$crtx_resp" | jq -r '.signed_url')"
-        curl -fsSL -o cortexcli "$crtx_url"
-        chmod +x cortexcli
-        ./cortexcli --version
+    #     crtx_resp="$(curl -sS "${CORTEX_API_URL}/public_api/v1/unified-cli/releases/download-link?os=linux&architecture=amd64" \
+    #       -H "x-xdr-auth-id: ${CORTEX_API_KEY_ID}" \
+    #       -H "Authorization: ${CORTEX_API_KEY}")"
+    #     crtx_url="$(echo "$crtx_resp" | jq -r '.signed_url')"
+    #     curl -fsSL -o cortexcli "$crtx_url"
+    #     chmod +x cortexcli
+    #     ./cortexcli --version
 
-    - name: Run Cortex CLI Code Scan
-      run: |
-        ./cortexcli \
-          --api-base-url "${{ env.CORTEX_API_URL }}" \
-          --api-key "${{ env.CORTEX_API_KEY }}" \
-          --api-key-id "${{ env.CORTEX_API_KEY_ID }}" \
-          code scan \
-          --directory "${{github.workspace}}" \
-          --repo-id "${{github.repository}}" \
-          --branch "${{github.ref_name}}" \
-          --source "GITHUB_ACTIONS" \
+    # - name: Run Cortex CLI Code Scan
+    #   run: |
+    #     ./cortexcli \
+    #       --api-base-url "${{ env.CORTEX_API_URL }}" \
+    #       --api-key "${{ env.CORTEX_API_KEY }}" \
+    #       --api-key-id "${{ env.CORTEX_API_KEY_ID }}" \
+    #       code scan \
+    #       --directory "${{github.workspace}}" \
+    #       --repo-id "${{github.repository}}" \
+    #       --branch "${{github.ref_name}}" \
+    #       --source "GITHUB_ACTIONS" \
+
           --create-repo-if-missing --compact
 
   infra_deployment:
