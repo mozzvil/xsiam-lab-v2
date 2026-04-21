@@ -24,7 +24,7 @@ env:
 jobs:
   cortex_code_scan:
     runs-on: ubuntu-latest
-    name: Cortex Code Scan
+    name: Cortex Code Scan &
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
