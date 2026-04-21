@@ -58,7 +58,7 @@ jobs:
     #       --branch "${{github.ref_name}}" \
     #       --source "GITHUB_ACTIONS" \
 
-          --create-repo-if-missing --compact
+    #        --create-repo-if-missing --compact
 
   infra_deployment:
     needs: cortex_code_scan
